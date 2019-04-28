@@ -24,7 +24,7 @@ register_matplotlib_converters()
 
 def change_working_directory():
 	"""
-	change_working_directory inputs the user to know whether they want to change their
+	change_working_directory() inputs the user to know whether they want to change their
 	current working directory. If yes, the function will create a "Market Data Extract"
 	folder on the user's desktop where the data will be stored.
 	"""	
@@ -188,8 +188,7 @@ def extract_save_option_data(ticker):
         1. Checks for nested directories <ticker>\options_data_<ticker>\<expiration_date>_<ticker>_<options>
 		and creates it if non-existent. Checks for a file named <expiration_date>_<ticker>_<calls/puts>_as-at_<date_extract> 
 		in the folder. If so, the function merges the existing data with data newly extracted.
-        2. Saves the data (merged when applicable) in the folder under the name 
-        <ticker>
+        2. Saves the data (merged when applicable) in the folder under the name <expiration_date>_<ticker>_<calls/puts>_as-at_<date_extract> 
 	"""
 	extract_dates = options.get_expiration_dates(ticker)
 	today = datetime.today().strftime("%Y-%m-%d")
