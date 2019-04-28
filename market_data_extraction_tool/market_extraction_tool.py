@@ -323,7 +323,7 @@ def short_term_analysis(ticker):
 
 # Oil & Gas: XOM, CVX, COP, EOG, OXY
 # Tech: AAPL, GOOGL, GOOG, FB, MSFT
-# Banking: JPM, BAC, C,WFC, GS
+# Banking: JPM, BAC, C, WFC, GS
 # Recent IPO: LYFT, PINS
 companies = ['XOM','CVX','COP','EOG','OXY','AAPL','GOOGL','GOOG','FB',"MSFT",'JPM','BAC','C','WFC','GS','LYFT',"PINS"]
 
@@ -332,7 +332,3 @@ extract_info(companies)
 
 #single_company_to_analyze = "GS"
 #short_term_analysis(single_company_to_analyze)
-
-
-
-
