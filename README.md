@@ -7,7 +7,7 @@ Oil & Gas: XOM, CVX, COP, EOG, OXY
 
 Tech: AAPL, GOOGL, GOOG, FB, MSFT
 
-Banking: JPM, BAC, C,WFC, GS
+Banking: JPM, BAC, C, WFC, GS
 
 Recent IPOs: LYFT, PINS
 
