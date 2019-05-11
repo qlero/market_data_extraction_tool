@@ -49,14 +49,14 @@ def import_web_intraday(ticker):
 	"""
 	Queries the stock market data provider AlphaVantage's website. AV provides stocks, 
 	forex, and cryptocurrencies. AV limits access for free users: 
-	- maximum of : 5 unique queries per minute; 500 unique queries per 24h period
-    - Intraday history is capped at the past five days (current + 4)
-    - After-hour data is not available
+	1. maximum of : 5 unique queries per minute; 500 unique queries per 24h period
+	2. Intraday history is capped at the past five days (current + 4)
+	3. After-hour data is not available
 	The provided data is formatted as a JSON file. It follows a minute frequency from 
 	open (09:30am) to closing (04:00pm). Each minute ticks is a list as follow:
-    open, close, low, high, average, and volume.
+	open, close, low, high, average, and volume.
 	:param <ticker>: String ; acronym of a company traded on a financial market
-    """
+	"""
 	website = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+ticker+'&interval=1min&apikey=’+YOUR_API_KEY+’&outputsize=full&datatype=json'
 	raw_json_intraday_data = requests.get(website)
 	return raw_json_intraday_data.json()
@@ -65,7 +65,7 @@ def import_web_daily(ticker):
 	"""
 	Queries the stock market data provider IEX's API. IEX provides stocks, forex, 
 	and cryptocurrencies data. IEX limits access for free users:
-	- maximum of: 5 years of daily data (/!\ standard in finance is usually 10)
+	1. maximum of: 5 years of daily data (/!\ standard in finance is usually 10)
 	The provided data is formatted as a panda dataframe.
 	:param <ticker>: String ; acronym of a company traded on a financial market
 	"""
@@ -171,12 +171,12 @@ def extract_save_option_data(ticker):
 	saves it. The option data is split per type (call or put), expiration date, and
 	day of import as they are highly volatile. It does:
 	1. Checks for nested directories:
-		<ticker>\options_data_<ticker>\<expiration_date>_<ticker>_<options>
+	<ticker>\options_data_<ticker>\<expiration_date>_<ticker>_<options>
 	Creates it if non-existent. 
 	2. Checks in the folder for a file named:
-		<expiration_date>_<ticker>_<calls/puts>_as-at_<date_extract> 
+	<expiration_date>_<ticker>_<calls/puts>_as-at_<date_extract> 
 	If so: merges the existing and newly extracted data.
-    3. Saves the data (merged when applicable) in the folder under the company's 
+	3. Saves the data (merged when applicable) in the folder under the company's 
 	acronym.
 	:param <ticker>: String ; acronym of a company traded on a financial market
 	"""
