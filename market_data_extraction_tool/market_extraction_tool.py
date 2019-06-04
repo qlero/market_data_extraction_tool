@@ -208,7 +208,7 @@ def extract_save_option_data(ticker):
 					json.dump(extract_chain, f)
 					print(f"{ticker}: {format_date} {option} options data retrieved successfully!\n")
 		except Exception as e:
-			print(f"{ticker}: {format_date} {option} options data could not be retrieved.\n")
+			print(f"{ticker}: {format_date} options data could not be retrieved.\n")
 
 def extract_info_intraday(company_list):
 	"""
