@@ -115,8 +115,7 @@ def partition_save_intraday(ticker,json_extract):
 				for item in existing_data_in_file:
 					daily_time_series[item] = existing_data_in_file[item]
 		except Exception as e:
-			print(f"{ticker}:")
-			print(e)
+			print(f"{ticker}: {e}")
 		with open(os.path.join(path,data_file_name), 'w') as f:
 			json.dump(daily_time_series, f)
 
@@ -142,8 +141,7 @@ def partition_save_daily(ticker, data_extract):
 			for item in existing_data_in_file:
 				data_extract_dictionary[item] = existing_data_in_file[item]
 	except Exception as e:
-		print(f"{ticker}:")
-		print(e)
+		print(f"{ticker}: {e}")
 	# Step 2
 	with open(os.path.join(ticker,data_file_name), 'w') as f:
 		json.dump(data_extract_dictionary, f)
@@ -183,31 +181,34 @@ def extract_save_option_data(ticker):
 	extract_dates = options.get_expiration_dates(ticker)
 	today = datetime.today().strftime("%Y-%m-%d")
 	for expiration_date in extract_dates:
-		extract = options.get_options_chain(ticker)
 		format_date = arrow.get(expiration_date, 'MMMM D, YYYY').format('YYYY-MM-DD')
-		path = ticker + "\\options_data_" + ticker + "\\" + format_date + "_" + ticker + "_options"
-		option_types = ["calls", "puts"]
-		for option in option_types:
-			extract_chain = extract[option]
-			extract_chain = extract_chain.to_dict(orient="index")
-			data_file_name = format_date + "_" + ticker + "_" + option + "_as-at_" + today
-			# Step 1
-			if not os.path.exists(path):
-				os.makedirs(path)
-			# Step 2
-			if os.path.isfile(os.path.join(path,data_file_name)) == True:
-				try:
-					with open(os.path.join(path,data_file_name),'r') as file:
-						existing_data_in_file = json.load(file)
-						for item in existing_data_in_file:
-							extract_chain[item] = existing_data_in_file[item]
-				except Exception as e:
-					print(f"{ticker}:")
-					print(e)
-			#Step 3
-			with open(os.path.join(path,data_file_name), 'w') as f:
-				json.dump(extract_chain, f)
-				print(f"{ticker}: {format_date} {option} options data retrieved successfully!\n")
+		extract_date = arrow.get(expiration_date, 'MMMM D, YYYY').format('MM/DD/YYYY')
+		try:
+			extract = options.get_options_chain(ticker, extract_date)
+			path = ticker + "\\options_data_" + ticker + "\\" + format_date + "_" + ticker + "_options"
+			option_types = ["calls", "puts"]
+			for option in option_types:
+				extract_chain = extract[option]
+				extract_chain = extract_chain.to_dict(orient="index")
+				data_file_name = format_date + "_" + ticker + "_" + option + "_as-at_" + today
+				# Step 1
+				if not os.path.exists(path):
+					os.makedirs(path)
+				# Step 2
+				if os.path.isfile(os.path.join(path,data_file_name)) == True:
+					try:
+						with open(os.path.join(path,data_file_name),'r') as file:
+							existing_data_in_file = json.load(file)
+							for item in existing_data_in_file:
+								extract_chain[item] = existing_data_in_file[item]
+					except Exception as e:
+						print(f"{ticker}: {e}")
+				#Step 3
+				with open(os.path.join(path,data_file_name), 'w') as f:
+					json.dump(extract_chain, f)
+					print(f"{ticker}: {format_date} {option} options data retrieved successfully!\n")
+		except Exception as e:
+			print(f"{ticker}: {format_date} {option} options data could not be retrieved.\n")
 
 def extract_info_intraday(company_list):
 	"""
@@ -224,8 +225,7 @@ def extract_info_intraday(company_list):
 				time.sleep(60)
 				print("1 MINUTE PASSED - RETURN TO REQUESTING ALPHAVANTAGE\n")
 	except Exception as e:
-		print(f"{company}:")
-		print(e)
+		print(f"{company}: {e}")
 
 def extract_info_daily_and_options(company_list):
 	"""
@@ -235,12 +235,15 @@ def extract_info_daily_and_options(company_list):
 	"""
 	try:
 		for company in company_list:
+			if ((company_list.index(company)+1) % 10 == 0 and company_list.index(company)+1 != len(company_list)):
+				print("YAHOO FINANCE REQUEST LIMIT REACHED - WAITING FOR 1 MINUTE\n")
+				time.sleep(60)
+				print("1 MINUTE PASSED - RETURN TO REQUESTING YAHOO FINANCE\n")
 			save_daily(company)
 			print(f"{company} daily market data retrieved successfully!\n")
 			extract_save_option_data(company)
 	except Exception as e:
-		print(f"{company}:")
-		print(e)
+		print(f"{company}: {e}")
 
 def extract_info_all(company_list):
 	"""
@@ -260,8 +263,7 @@ def extract_info_all(company_list):
 				time.sleep(60)
 				print("1 MINUTE PASSED - RETURN TO REQUESTING ALPHAVANTAGE\n")
 	except Exception as e:
-		print(f"{company}:")
-		print(e)
+		print(f"{company}:{e}")
 
 def short_term_analysis(ticker):
 	"""
@@ -292,9 +294,9 @@ def short_term_analysis(ticker):
 	"""   
 	# Step 1
 	path = ticker + "\\intraday_data"
-	covered_date_filenames = os.listdir(path)[-5:]
 	market_data = {}
 	try:
+		covered_date_filenames = os.listdir(path)[-5:]
 		for filename in covered_date_filenames:
 			with open(os.path.join(ticker,"intraday_data",filename),'r') as file:
 				load_dict = json.load(file)
@@ -302,8 +304,7 @@ def short_term_analysis(ticker):
 		market_data_minute_time_series = pd.DataFrame(market_data).transpose()
 		print("Data loaded from existing local file.")
 	except Exception as e:
-		print(f"{ticker}:")
-		print(e)
+		print(f"{ticker}: {e}")
 		market_data = import_web_intraday(ticker)
 		market_data_minute_time_series = pd.DataFrame(market_data["Time Series (1min)"]).transpose()
 		market_data_minute_time_series = market_data_minute_time_series.reindex(index=market_data_minute_time_series.index[::-1])
@@ -317,30 +318,29 @@ def short_term_analysis(ticker):
 	# Step 2.3
 	market_data_minute_time_series.index = pd.to_datetime(market_data_minute_time_series.index, format = '%Y-%m-%d %H:%M:%S')
 	# Step 2.4
-	i = 0
-	for index in market_data_minute_time_series.index:
-		if str(index)[-8:] == "09:31:00" and str(market_data_minute_time_series.iloc[i-1])[-8:] != "09:30:00":
-			market_data_minute_time_series.loc[pd.Timestamp(str(index)[:11]+"09:30:00")] = [0,0,0,market_data_minute_time_series.iloc[i][0],0]
-		i += 1
+	for counter, index in enumerate(market_data_minute_time_series.index):
+		if str(index)[-8:] == "09:31:00" and str(market_data_minute_time_series.iloc[counter-1])[-8:] != "09:30:00":
+			market_data_minute_time_series.loc[pd.Timestamp(str(index)[:11]+"09:30:00")] = [0,0,0,market_data_minute_time_series.iloc[counter][0],0]
 	market_data_minute_time_series = market_data_minute_time_series.sort_index()
 	# Step 3
 	plt.style.use('ggplot')
 	fig, ax = plt.subplots(1, len(dates_in_time_series), figsize=(16,7))
 	plt.suptitle(ticker, size = 20, y=0.93)
 	i = 0
-	for group_name, df_group in market_data_minute_time_series.groupby(pd.Grouper(freq='D')):
+	for counter, (group_name, df_group) in enumerate(market_data_minute_time_series.groupby(pd.Grouper(freq='D'))):
 		if df_group.empty == False:
-			ax[i].plot(df_group['4. close'], color = "blue")
+			ax[counter-i].plot(df_group['4. close'], color = "blue")
 			xfmt = mpl.dates.DateFormatter('%m-%d %H:%M')
-			ax[i].xaxis.set_major_locator(mpl.dates.MinuteLocator(byminute=[30], interval = 1))
-			ax[i].xaxis.set_major_formatter(xfmt)
-			ax[i].get_xaxis().set_tick_params(which='major', pad=4)
-			ax[i].set_ylim(min(market_data_minute_time_series['4. close'])-
+			ax[counter-i].xaxis.set_major_locator(mpl.dates.MinuteLocator(byminute=[30], interval = 1))
+			ax[counter-i].xaxis.set_major_formatter(xfmt)
+			ax[counter-i].get_xaxis().set_tick_params(which='major', pad=4)
+			ax[counter-i].set_ylim(min(market_data_minute_time_series['4. close'])-
 				round(0.005*min(market_data_minute_time_series['4. close']),0),
 				max(market_data_minute_time_series['4. close'])+
 				round(0.005*max(market_data_minute_time_series['4. close']),0))
+		else:
+			i += 1
 		fig.autofmt_xdate()
-		i += 1
 	plt.show()
 
 # Oil & Gas: XOM, CVX, COP, EOG, OXY
