@@ -21,6 +21,7 @@ The companies covered are hardcoded as a list in the script. You can, of course,
 
 The script also contains a function to plot the past 5 days data of a single stock:
 > single_company_to_analyze = "GS"
+
 > short_term_analysis(single_company_to_analyze)
 
 ### Past Updates
@@ -41,5 +42,8 @@ Update on June 4th, 2019:
 3. Updated the README.md to reflect changes
 
 Update on August 24th, 2019:
-1. Updated the code
+1. Updated the code for readability
 2. The IEX data provider now requires an API token to work
+
+Update on August 28th, 2019:
+1. Updated the code structure

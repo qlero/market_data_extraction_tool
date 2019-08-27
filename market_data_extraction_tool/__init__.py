@@ -1,1 +1,1 @@
-name = "market_data_extraction_tool"
+from .market_extraction_tool import main

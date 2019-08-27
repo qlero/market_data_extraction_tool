@@ -343,37 +343,33 @@ def short_term_analysis(ticker):
 		fig.autofmt_xdate()
 	plt.show()
 
-def main():
+def main(company_list):
 	"""
 	Main function call.
 	--------
-	No arguments
+	:param <company_list>: List ; list of publicly traded companies' tickers
 	"""
 	# Oil & Gas: XOM, CVX, COP, EOG, OXY
 	# Tech: AAPL, GOOGL, GOOG, FB, MSFT
 	# Banking: JPM, BAC, C,WFC, GS
 	# Recent IPO: LYFT, PINS
-	firms = ['XOM','CVX','COP','EOG','OXY','AAPL','GOOGL','GOOG','FB','MSFT','JPM','BAC','C','WFC','GS','LYFT','PINS']
 
 	#Concurrent running
 	#try:
-	#	process_1 = Process(target = extract_info_intraday, args=(firms,))
+	#	process_1 = Process(target = extract_info_intraday, args=(company_list,))
 	#	process_1.start()
-	#	process_2 = Process(target = extract_info_daily_and_options, args=(firms,))
+	#	process_2 = Process(target = extract_info_daily_and_options, args=(company_list,))
 	#	process_2.start()
 	#except Exception as e:
 	#	print(e)
 	
 	#Sequential running
-	#extract_info_intraday(firms)
-	#extract_info_daily_and_options(firms)
-	extract_info_all(firms)
+	extract_info_intraday(company_list)
+	extract_info_daily_and_options(company_list)
+	#extract_info_all(company_list)
 
 	single_company_to_analyze = "GS"
 	short_term_analysis(single_company_to_analyze)
-
-if __name__=='__main__':
-	main()
 
 
 
