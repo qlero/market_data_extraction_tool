@@ -47,3 +47,10 @@ Update on August 24th, 2019:
 
 Update on August 28th, 2019:
 1. Updated the code structure
+
+Update on September 12th, 2019:
+1. Implemented a command line parameter pull so users can choose to extract data concurrently or not in the command line:
+
+> $main.py True
+
+"True" is case sensitive.

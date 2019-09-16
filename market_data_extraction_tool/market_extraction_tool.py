@@ -343,7 +343,7 @@ def short_term_analysis(ticker):
 		fig.autofmt_xdate()
 	plt.show()
 
-def main(company_list):
+def main(company_list, concurrency = False):
 	"""
 	Main function call.
 	--------
@@ -355,18 +355,19 @@ def main(company_list):
 	# Recent IPO: LYFT, PINS
 
 	#Concurrent running
-	#try:
-	#	process_1 = Process(target = extract_info_intraday, args=(company_list,))
-	#	process_1.start()
-	#	process_2 = Process(target = extract_info_daily_and_options, args=(company_list,))
-	#	process_2.start()
-	#except Exception as e:
-	#	print(e)
-	
-	#Sequential running
-	extract_info_intraday(company_list)
-	extract_info_daily_and_options(company_list)
-	#extract_info_all(company_list)
+	if concurrency:
+		try:
+			process_1 = Process(target = extract_info_intraday, args=(company_list,))
+			process_1.start()
+			process_2 = Process(target = extract_info_daily_and_options, args=(company_list,))
+			process_2.start()
+		except Exception as e:
+			print(e)
+	else:
+		#Sequential running
+		extract_info_intraday(company_list)
+		extract_info_daily_and_options(company_list)
+		#extract_info_all(company_list)
 
 	single_company_to_analyze = "GS"
 	short_term_analysis(single_company_to_analyze)
