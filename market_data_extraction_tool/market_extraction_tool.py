@@ -47,7 +47,7 @@ def import_web_daily(ticker):
 	"""
 	end = datetime.today()
 	start = end.replace(year=end.year-5)
-	daily_data = web.DataReader(ticker, 'iex', start, end, access_key = "<YOURKEY>")
+	daily_data = web.DataReader(ticker, 'iex', start, end, access_key = "YOUR_API_KEY")
 	return daily_data
 
 def partition_save_intraday(ticker,json_extract):
