@@ -8,11 +8,13 @@ market_data_extraction_tool is a script that downloads:
 market_data_extraction_tool requires Python 3.x to run. It uses the following modules:
 
 > cd market_data_extraction_tool
+
 > pip install --user --requirement requirements.txt
 
 Go to ``market_extraction_tool.py`` and replace:
 
 > ``YOUR_API_KEY`` in the function ``import_web_intraday`` with your working AlphaVantage API key
+
 > ``YOUR_API_KEY`` in the function ``import_web_daily`` with your working IEX API key
 
 ### How it works
