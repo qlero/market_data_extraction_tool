@@ -349,10 +349,6 @@ def main(company_list, concurrency = False):
 	--------
 	:param <company_list>: List ; list of publicly traded companies' tickers
 	"""
-	# Oil & Gas: XOM, CVX, COP, EOG, OXY
-	# Tech: AAPL, GOOGL, GOOG, FB, MSFT
-	# Banking: JPM, BAC, C,WFC, GS
-	# Recent IPO: LYFT, PINS
 
 	#Concurrent running
 	if concurrency:
